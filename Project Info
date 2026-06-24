@@ -1,1 +1,478 @@
+# MediScan AI – Project Summary
+
+## Project Overview
+
+MediScan AI is a healthcare platform that helps users manage prescriptions, medicines, medical reports, and health records. It uses OCR and AI to extract medicine information from uploaded prescriptions and automatically creates medicine reminders.
+
+---
+
+# Core Features
+
+### 1. User Authentication
+
+* Register
+* Login
+* JWT Authentication
+
+---
+
+### 2. Prescription Upload & AI Analysis
+
+#### Flow
+
+```text
+Upload Prescription
+        ↓
+Cloudinary Storage
+        ↓
+Google Vision OCR
+        ↓
+Extract Text
+        ↓
+Gemini AI Analysis
+        ↓
+Extract Medicines
+        ↓
+Store in PostgreSQL
+        ↓
+Create Medicine Schedules
+```
+
+### Technologies
+
+* Google Vision API (OCR)
+* Gemini API
+* Cloudinary
+* PostgreSQL
+
+---
+
+### 3. Medicine Management
+
+Users can:
+
+* Add Medicine
+* View Medicines
+* Update Medicine
+* Stop Medicine
+* Delete Medicine
+
+Each medicine contains:
+
+```text
+Medicine Name
+Dosage
+Start Date
+End Date
+Reminder Times
+Status (Active/Inactive)
+```
+
+Example:
+
+```text
+Metformin
+
+Start Date : 24-06-2026
+End Date   : 24-07-2026
+
+08:00 AM
+08:00 PM
+```
+
+---
+
+### 4. Medicine Reminder System
+
+#### Technologies
+
+* Spring Scheduler
+* Firebase Cloud Messaging (FCM)
+
+#### Flow
+
+```text
+Medicine Schedule Stored
+        ↓
+Spring Scheduler Runs
+        ↓
+Checks Active Medicines
+        ↓
+Matches Current Time
+        ↓
+Sends Push Notification
+```
+
+Supports:
+
+* Single medicine reminder
+* Multiple medicines at same time
+* Daily recurring reminders
+* Manual stop
+* Automatic expiry after treatment ends
+
+---
+
+### 5. Medical Report Management
+
+Users can upload:
+
+* Blood Reports
+* X-Ray Reports
+* MRI Reports
+* Other Medical Documents
+
+#### Storage
+
+```text
+File → Cloudinary
+
+Database → Store Cloudinary URL
+```
+
+React directly opens Cloudinary URLs.
+
+---
+
+### 6. Health Tracking
+
+Store:
+
+* Blood Pressure
+* Sugar Level
+* Weight
+* Heart Rate
+* Temperature
+
+APIs:
+
+```http
+POST /health-record
+
+GET /health-history
+```
+
+---
+
+### 7. QR-Based Medical Profile
+
+Each user gets a unique QR Code.
+
+QR contains:
+
+```text
+Secure Token / URL
+```
+
+Example:
+
+```text
+https://app.com/public/profile/abc123
+```
+
+---
+
+## Emergency Information
+
+Anyone scanning QR can view:
+
+```text
+Blood Group
+Allergies
+Emergency Contact
+```
+
+No login required.
+
+---
+
+## Consent-Based Medical History Access
+
+### Flow
+
+```text
+Scan QR
+      ↓
+View Emergency Data
+      ↓
+Request Full Access
+      ↓
+Patient Receives Notification
+      ↓
+Approve / Reject
+      ↓
+Temporary Access Granted
+```
+
+### Public Data
+
+```text
+Blood Group
+Allergies
+Emergency Contact
+```
+
+### Protected Data
+
+```text
+Reports
+Prescriptions
+Medicines
+Medical History
+```
+
+---
+
+## Access APIs
+
+```http
+POST /access/request
+
+POST /access/approve
+
+POST /access/reject
+
+GET /access/{token}
+```
+
+After approval:
+
+```text
+Temporary Access Token Generated
+```
+
+Valid for limited time.
+
+---
+
+# Database Structure
+
+## Tables
+
+### users
+
+Stores:
+
+```text
+User Information
+Authentication Details
+Blood Group
+Allergies
+Emergency Contact
+QR Token
+FCM Token
+```
+
+---
+
+### prescriptions
+
+Stores:
+
+```text
+Uploaded Prescription
+OCR Text
+Cloudinary URL
+```
+
+---
+
+### medicines
+
+Stores:
+
+```text
+Medicine Details
+Dosage
+Start Date
+End Date
+Status
+```
+
+---
+
+### medicine_schedule
+
+Stores:
+
+```text
+Medicine Reminder Times
+```
+
+Example:
+
+```text
+08:00 AM
+08:00 PM
+```
+
+---
+
+### reports
+
+Stores:
+
+```text
+Medical Reports
+Cloudinary URLs
+```
+
+---
+
+### health_records
+
+Stores:
+
+```text
+BP
+Sugar
+Weight
+Heart Rate
+Temperature
+```
+
+---
+
+### access_requests
+
+Stores:
+
+```text
+Access Requests
+Approval Status
+```
+
+---
+
+### access_grants
+
+Stores:
+
+```text
+Temporary Access Tokens
+Expiry Time
+```
+
+---
+
+### notifications
+
+Stores:
+
+```text
+Notification History
+```
+
+---
+
+# Backend Tech Stack
+
+### Spring Boot
+
+Modules:
+
+```text
+Controllers
+Services
+Repositories
+Entities
+DTOs
+Schedulers
+Security
+```
+
+### Required Services
+
+```text
+AuthService
+
+PrescriptionService
+
+OCRService
+
+GeminiService
+
+MedicineService
+
+ReportService
+
+HealthService
+
+NotificationService
+
+QRService
+
+AccessService
+```
+
+---
+
+# Frontend Tech Stack
+
+### React + Vite + JavaScript
+
+Main Pages:
+
+```text
+Login
+
+Register
+
+Dashboard
+
+Upload Prescription
+
+Prescription History
+
+Medicines
+
+Reports
+
+Health Tracking
+
+My QR Code
+
+Emergency Profile
+
+Access Requests
+
+Profile
+```
+
+---
+
+# External Services
+
+| Service                  | Purpose               |
+| ------------------------ | --------------------- |
+| Google Vision API        | OCR                   |
+| Gemini API               | Prescription Analysis |
+| Cloudinary               | File Storage          |
+| Firebase Cloud Messaging | Push Notifications    |
+| PostgreSQL               | Database              |
+| ZXing                    | QR Code Generation    |
+
+---
+
+# Key Innovation
+
+```text
+Handwritten Prescription
+          ↓
+OCR
+          ↓
+AI Understands Medicines
+          ↓
+Automatic Medicine Schedules
+          ↓
+Push Notifications
+          ↓
+Medical History Management
+          ↓
+QR-Based Emergency Profile
+          ↓
+Consent-Based Record Sharing
+```
+
+This is the final streamlined scope of the **MediScan AI** project without the extra exploratory discussions.
 

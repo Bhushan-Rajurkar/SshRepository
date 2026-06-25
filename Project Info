@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-MediScan AI is a healthcare platform that helps users manage prescriptions, medicines, medical reports, and health records. It uses OCR and AI to extract medicine information from uploaded prescriptions and automatically creates medicine reminders.
+MediScan AI is a healthcare platform that helps users manage prescriptions, medicines, medical reports, and health records. It uses OCR and AI to extract medicine information from uploaded prescriptions and automatically creates medicine reminders,also gives QR for getting patients health records and Emergency details. 
 
 ---
 
